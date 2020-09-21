@@ -241,3 +241,85 @@ $(function() {
 	}
 	createSelectChannels();
 });
+
+// Reminder
+$(function() {
+	String.prototype.capitalize = function() {
+	  return this.charAt(0).toUpperCase() + this.slice(1)
+	}
+	
+	class Reminder {
+		constructor({ id, channel, title, date }) {
+			this.id = id;
+			this.title = title;
+			this.channel = channel;
+			this.date = date;
+		}
+		getDate(){
+			return new Date(this.date);
+		}
+		getChannelName() {
+			let channelName = this.channel.substring(this.channel.lastIndexOf('/') + 1);
+			return channelName.replace(/-/g, ' ');
+		}
+		isTime() {
+			const now = new Date();
+			const date = this.getDate();
+			return now.getFullYear() == date.getFullYear() && now.getMonth() == date.getMonth() && now.getDate() == date.getDate() && now.getHours() == date.getHours() && now.getMinutes() == date.getMinutes()
+		}
+	}
+	
+	class ReminderStorage {
+		static getItems() {
+			const items = JSON.parse(localStorage.getItem('reminders')) || [];
+			return items.map((item) => new Reminder(item));
+		}
+		static setItem(reminder) {
+			const items = ReminderStorage.getItems();
+			items.push(reminder);
+			localStorage.setItem('reminders', JSON.stringify(items));
+		}
+		static removeItem(reminder) {
+			let items = ReminderStorage.getItems();
+			items = items.filter((item) => reminder.id != item.id);
+			localStorage.setItem('reminders', JSON.stringify(items));
+		}
+	}
+	
+	if (ReminderStorage.getItems().length) {
+		setInterval(function() {
+			const items = ReminderStorage.getItems();
+			for (var item in items) {
+				const reminder = items[item];
+				if (reminder.isTime()) {
+					const message = `Kanal: ${reminder.getChannelName()}\r\nNaziv: ${reminder.title}\r\nŽelite gledati?`;
+					const response = confirm(message);
+					if (response) {
+						ReminderStorage.removeItem(reminder);
+						window.location.href = reminder.channel;
+					} else {
+						ReminderStorage.removeItem(reminder);
+					}
+				}
+				
+			}
+		}, 5000);
+	}
+	
+	
+	$(document.body).on('click', '#epg tr > td', function() {
+		const channel = window.location.pathname;
+		const now = new Date();
+		
+		const title = $(this).next().text().capitalize();
+		const dateStr = `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${$(this).text()}`;
+	
+		const reminder = new Reminder({ id: Date.now(), channel, title });
+		const response = prompt(`Kanal: ${reminder.getChannelName()}\r\nNaziv: ${title}\r\nUnesite datum i vrijeme za podsjetnik:`, dateStr);
+		if (response) {
+			reminder.date = response;
+			ReminderStorage.setItem(reminder);
+		}
+		
+	});
+});
