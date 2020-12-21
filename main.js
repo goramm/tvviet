@@ -292,7 +292,7 @@ $(function() {
 			for (var item in items) {
 				const reminder = items[item];
 				if (reminder.isTime()) {
-					const message = `Kanal: ${reminder.getChannelName()}\r\nNaziv: ${reminder.title}\r\nŽelite gledati?`;
+					const message = `PODSJETNIK\r\nKanal: ${reminder.getChannelName()}\r\nNaziv: ${reminder.title}\r\nŽelite gledati?`;
 					const response = confirm(message);
 					if (response) {
 						ReminderStorage.removeItem(reminder);
@@ -306,8 +306,8 @@ $(function() {
 		}, 5000);
 	}
 	
-	
-	$(document.body).on('click', '#epg tr > td', function() {
+	$('#epg tr > td:first-child').attr('title', 'Dodaj podsjetnik');
+	$(document.body).on('click', '#epg tr > td:first-child', function() {
 		const channel = window.location.pathname;
 		const now = new Date();
 		
@@ -315,7 +315,7 @@ $(function() {
 		const dateStr = `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${$(this).text()}`;
 	
 		const reminder = new Reminder({ id: Date.now(), channel, title });
-		const response = prompt(`Kanal: ${reminder.getChannelName()}\r\nNaziv: ${title}\r\nUnesite datum i vrijeme za podsjetnik:`, dateStr);
+		const response = prompt(`PODSJETNIK\r\nKanal: ${reminder.getChannelName()}\r\nNaziv: ${title}\r\nUnesite datum i vrijeme za podsjetnik:`, dateStr);
 		if (response) {
 			reminder.date = response;
 			ReminderStorage.setItem(reminder);
