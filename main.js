@@ -1,5 +1,4 @@
 $(function() {
-	
 	class Category {
 		static all = 'Svi';
 		
@@ -197,7 +196,7 @@ $(function() {
 	
 	function createSelectChannels() {
 		let html = '<div class="select-channels"><button class="prev-channel">&#8249;</button>';
-		html += '<select class="form-control form-select-channels">';
+		html += '<select class="form-control form-select-channels" autocomplete="off">';
 		const $cols = $('.col-channel').filter(function() {
 			return $(this).css('display') !== 'none'
 		});
@@ -234,12 +233,34 @@ $(function() {
 		});
 	}
 	
+	function sortTvodSelect() {
+		const $select = $('.tvod-layout select');
+		if ($select.length) {
+			const options = $select[0].options;
+		    const optionsArray = [];
+		    
+		    for (var i = 1; i < options.length; i++) {
+		        optionsArray.push(options[i]);
+		    }
+		    
+		    const sortedArray = optionsArray.sort(function (a, b) {
+			    return a.text > b.text ? 1 : a.text < b.text ? -1 : 0;
+		    });
+		
+		    for (var i = 0; i <= optionsArray.length; i++) {            
+		        options[i+1] = optionsArray[i];
+		    }
+		}
+	    
+	}
+	
 	addCategoryAndNameToChannels();
 	selectCurrentChannel();
 	if (searchParam || categoryParam) {
 		searchChannels();
 	}
 	createSelectChannels();
+	sortTvodSelect();
 });
 
 // Reminder
@@ -265,7 +286,7 @@ $(function() {
 		isTime() {
 			const now = new Date();
 			const date = this.getDate();
-			return now.getFullYear() == date.getFullYear() && now.getMonth() == date.getMonth() && now.getDate() == date.getDate() && now.getHours() == date.getHours() && now.getMinutes() == date.getMinutes()
+			return now.getFullYear() == date.getFullYear() && now.getMonth() == date.getMonth() && now.getDate() == date.getDate() && now.getHours() == date.getHours() && (now.getMinutes() == date.getMinutes() - 1)
 		}
 	}
 	
