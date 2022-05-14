@@ -42,14 +42,11 @@ $(function() {
 	
 	let fullScreen = false;
 	$(document).on('keyup', function(e) {
-		if (e.key === 'Alt' || e.key === 'AltGraph') {
-			e.preventDefault();
-			$('.more-channel-btn i').click();
-		} else if (e.target.id === 'search') { 
+		if (e.target.id === 'search') { 
 			return; 
 		}
 		navigateChannelsByArrow(e);
-		if (e.key === '/' || e.key === '-') {
+		if (e.key === 'Enter') {
 			if (!fullScreen) {
 				$(this).focus();
 				$('#html5-player')[0].requestFullscreen();
