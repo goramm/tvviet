@@ -46,7 +46,7 @@ $(function() {
 			return; 
 		}
 		navigateChannelsByArrow(e);
-		if (e.key === 'Enter') {
+		if (e.key === 'f') {
 			if (!fullScreen) {
 				$(this).focus();
 				$('#html5-player')[0].requestFullscreen();
