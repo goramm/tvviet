@@ -40,20 +40,17 @@ $(function() {
 		}
 	});
 	
-	let fullScreen = false;
 	$(document).on('keyup', function(e) {
 		if (e.target.id === 'search') { 
 			return; 
 		}
 		navigateChannelsByArrow(e);
 		if (e.key === 'f') {
-			if (!fullScreen) {
+			if (document.fullscreenElement) {
+				document.exitFullscreen();			
+			} else {
 				$(this).focus();
 				$('#html5-player')[0].requestFullscreen();
-				fullScreen = true;
-			} else {
-				document.exitFullscreen();
-				fullScreen = false;
 			}
 			
 		}
