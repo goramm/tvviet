@@ -54,6 +54,9 @@ $(function() {
 			}
 			
 		}
+		if (e.key === 'Enter') {
+			$('.form-select-channels').focus();
+		}
 	});
 	
 	$('.more-channel-btn').on('click', function() {
@@ -190,7 +193,7 @@ $(function() {
 	
 	function createSelectChannels() {
 		let html = '<div class="select-channels"><button class="prev-channel">&#8249;</button>';
-		html += '<select class="form-control form-select-channels" autocomplete="off">';
+		html += '<select class="form-control form-select-channels" autocomplete="off" autofocus>';
 		const $cols = $('.col-channel').filter(function() {
 			return $(this).css('display') !== 'none'
 		});
